@@ -69,7 +69,8 @@ def choice_of_answer(message):
         btn3 = types.KeyboardButton('Вернуться назад')
         markup.add(btn1, btn2, btn3)
         bot.send_message(message.chat.id, 'Что ты хочешь сделать?', reply_markup=markup)
-        # bot.register_next_step_handler(message, )
+        bot.register_next_step_handler(message, dialog_katya)
+
     elif message.text == "Сколько дней осталось до зп?":
         bot.send_message(message.chat.id, 'Скоро получишь! Осталось чуть-чуть')
     elif message.text == "Сколько осталось спать?":
@@ -87,18 +88,34 @@ def choice_of_answer(message):
 def weather(message):
     if message.text == "Погода сегодня":
         bot.send_message(message.chat.id, 'Сейчас расскажу тебе погоду в Новосибирске на сегодня')
+        bot.register_next_step_handler(message, weather)
     elif message.text == "Погода сейчас":
         bot.send_message(message.chat.id, 'Сейчас расскажу тебе погоду в Новосибирске на данный момент')
+        bot.register_next_step_handler(message, weather)
     elif message.text == "Вернуться назад":
         start(message)
 
 def event(message):
     if message.text == "Запланировать событие":
         bot.send_message(message.chat.id, 'Напиши, что ты хочешь запланировать.')
+        bot.register_next_step_handler(message, event)
     elif message.text == "Посмотреть событие":
         bot.send_message(message.chat.id, 'Что тебя интересует?')
+        bot.register_next_step_handler(message, event)
     elif message.text == "Вернуться назад":
         start(message)
 
+# Делаем кнопку с ссылкой, для открытия диалога со мной в телеграмме
+def dialog_katya(message):
+    if message.text == "Открыть диалог с Катей":
+        markup = types.InlineKeyboardMarkup()
+        markup.add(types.InlineKeyboardButton("Открыть диалог", url = ""))
+        bot.send_message(message.chat.id, 'Жми, она ждет', reply_markup=markup)
+        bot.register_next_step_handler(message, dialog_katya)
+    elif message.text == "Открыть сообщение от Кати":
+        bot.send_message(message.chat.id, 'Она просила передать тебе, что любит тебя и желает хорошего дня!')
+        bot.register_next_step_handler(message, dialog_katya)
+    elif message.text == "Вернуться назад":
+        start(message)
 
 bot.polling(none_stop=True)
