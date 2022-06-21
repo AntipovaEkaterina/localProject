@@ -50,33 +50,35 @@ def choice_of_answer(message):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
         btn1 = types.KeyboardButton('Погода сегодня')
         btn2 = types.KeyboardButton('Погода сейчас')
-        # btn3 = types.KeyboardButton('Вернуться назад')
-        markup.add(btn1, btn2)
+        btn3 = types.KeyboardButton('Вернуться назад')
+        markup.add(btn1, btn2, btn3)
         bot.send_message(message.chat.id, 'Что именно тебя интересует?', reply_markup=markup)
         bot.register_next_step_handler(message, weather)
     elif message.text == "Событие":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
         btn1 = types.KeyboardButton('Запланировать событие')
         btn2 = types.KeyboardButton('Посмотреть событие')
-        # btn3 = types.KeyboardButton('Вернуться назад')
-        markup.add(btn1, btn2)
+        btn3 = types.KeyboardButton('Вернуться назад')
+        markup.add(btn1, btn2, btn3)
         bot.send_message(message.chat.id, 'Что ты хочешь сделать?', reply_markup=markup)
         bot.register_next_step_handler(message, event)
     elif message.text == "Катя":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
         btn1 = types.KeyboardButton('Открыть диалог с Катей')
         btn2 = types.KeyboardButton('Открыть сообщение от Кати')
-        # btn3 = types.KeyboardButton('Вернуться назад')
-        markup.add(btn1, btn2)
+        btn3 = types.KeyboardButton('Вернуться назад')
+        markup.add(btn1, btn2, btn3)
         bot.send_message(message.chat.id, 'Что ты хочешь сделать?', reply_markup=markup)
         # bot.register_next_step_handler(message, )
     elif message.text == "Сколько дней осталось до зп?":
         bot.send_message(message.chat.id, 'Скоро получишь! Осталось чуть-чуть')
     elif message.text == "Сколько осталось спать?":
         bot.send_message(message.chat.id, 'Самое популярное занятие перед сном — считать, сколько часов ты проспишь, если уснешь прямо сейчас.'
-                                          'Как Хорошо, что у тебя есть этот бот.')
+                                          ' Как хорошо, что у тебя есть этот бот.')
     elif message.text == "Насколько ты молодец":
         bot.send_message(message.chat.id, 'Ты молодец на 100%')
+    elif message.text == "Вернуться назад":
+        start(message)
     else:
         bot.send_message(message.chat.id, 'Тут тебе придется немного подождать, я еще не все сделала.\n '
                                           'Поиграй пока с другими кнопками.<b> Для этого тебе надо нажать на /start</b>', parse_mode='html')
@@ -87,14 +89,16 @@ def weather(message):
         bot.send_message(message.chat.id, 'Сейчас расскажу тебе погоду в Новосибирске на сегодня')
     elif message.text == "Погода сейчас":
         bot.send_message(message.chat.id, 'Сейчас расскажу тебе погоду в Новосибирске на данный момент')
-    # elif message.text == "Вернуться назад":
+    elif message.text == "Вернуться назад":
+        start(message)
 
 def event(message):
     if message.text == "Запланировать событие":
         bot.send_message(message.chat.id, 'Напиши, что ты хочешь запланировать.')
     elif message.text == "Посмотреть событие":
         bot.send_message(message.chat.id, 'Что тебя интересует?')
-
+    elif message.text == "Вернуться назад":
+        start(message)
 
 
 bot.polling(none_stop=True)
