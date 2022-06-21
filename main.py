@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from telebot import *
 from telebot import types
-
+import random
 
 #Параметр - токен необходимого бота с которым будем взаимодействовать
 bot = telebot.TeleBot('')
@@ -77,7 +77,11 @@ def choice_of_answer(message):
         bot.send_message(message.chat.id, 'Самое популярное занятие перед сном — считать, сколько часов ты проспишь, если уснешь прямо сейчас.'
                                           ' Как хорошо, что у тебя есть этот бот.')
     elif message.text == "Насколько ты молодец":
-        bot.send_message(message.chat.id, 'Ты молодец на 100%')
+        rand_num = random.randrange(85, 110, 1)
+        if rand_num < 95:
+            bot.send_message(message.chat.id, 'Ты молодец на {}%'.format(rand_num))
+        else:
+            bot.send_message(message.chat.id, 'Ты мега молодец на {}%'.format(rand_num))
     elif message.text == "Вернуться назад":
         start(message)
     else:
