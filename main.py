@@ -73,7 +73,11 @@ def choice_of_answer(message):
         bot.register_next_step_handler(message, dialog_katya)
 
     elif message.text == "Сколько дней осталось до зп?":
-        bot.send_message(message.chat.id, 'Осталось: {}'.format(day_pay.day_salary()))
+        day = day_pay.day_salary()
+        if day == 0:
+            bot.send_message(message.chat.id, 'Сегодня ты получишь ЗП!!')
+        else:
+            bot.send_message(message.chat.id, 'Осталось: {}'.format(day))
     elif message.text == "Сколько осталось спать?":
         bot.send_message(message.chat.id, 'Самое популярное занятие перед сном — считать, сколько часов ты проспишь, если уснешь прямо сейчас.'
                                           ' Как хорошо, что у тебя есть этот бот.')
