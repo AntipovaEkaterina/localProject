@@ -2,6 +2,7 @@
 from telebot import *
 from telebot import types
 import random
+import day_pay
 
 #Параметр - токен необходимого бота с которым будем взаимодействовать
 bot = telebot.TeleBot('')
@@ -72,7 +73,7 @@ def choice_of_answer(message):
         bot.register_next_step_handler(message, dialog_katya)
 
     elif message.text == "Сколько дней осталось до зп?":
-        bot.send_message(message.chat.id, 'Скоро получишь! Осталось чуть-чуть')
+        bot.send_message(message.chat.id, 'Осталось: {}'.format(day_pay.day_salary()))
     elif message.text == "Сколько осталось спать?":
         bot.send_message(message.chat.id, 'Самое популярное занятие перед сном — считать, сколько часов ты проспишь, если уснешь прямо сейчас.'
                                           ' Как хорошо, что у тебя есть этот бот.')
@@ -109,7 +110,7 @@ def event(message):
     elif message.text == "Вернуться назад":
         start(message)
 
-# Делаем кнопку с ссылкой, для открытия диалога со мной в телеграмме
+# Делаем inline кнопку с ссылкой, для открытия диалога со мной в телеграме
 def dialog_katya(message):
     if message.text == "Открыть диалог с Катей":
         markup = types.InlineKeyboardMarkup()
