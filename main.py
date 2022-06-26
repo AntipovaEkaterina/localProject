@@ -3,17 +3,19 @@ from telebot import *
 from telebot import types
 import random
 import day_pay
+import sleep
 
 #Параметр - токен необходимого бота с которым будем взаимодействовать
 bot = telebot.TeleBot('')
 
-def create_inline_button():
+#Метод для создания inline кнопок
+def create_inline_button(list):
     markup = types.InlineKeyboardMarkup()
-    button1 = types.InlineKeyboardButton(text="Да", callback_data="yes")
-    button2 = types.InlineKeyboardButton(text="Нет", callback_data="no")
-    markup.add(button1, button2)
+    button_list = [types.InlineKeyboardButton(text=x, callback_data=x) for x in list]
+    markup.add(*button_list)
     return markup
 
+#Метод для создания обычных кнопок
 def create_button(list):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
     button_list = [types.KeyboardButton(text=x) for x in list]
@@ -23,7 +25,7 @@ def create_button(list):
 #Отслеживаем команду /start
 @bot.message_handler(commands=['start'])
 def start(message):
-    #Добавляем InLine клавиатуру к сообщению
+    list = ['Да', 'Нет']
     #Добавляем имя и фамилию пользоватея в сообщение с приветсвием
     name = f'<b>Привет, {message.from_user.first_name} {message.from_user.last_name}.\n' \
            f'Благодаря этому боту ты сможешь узнать:</b>\n\n' \
@@ -37,15 +39,19 @@ def start(message):
            f'8.Сколько тебе осталось спать\n' \
            f'9.Насколько ты молодец\n' \
            f'\n<b>Скорее нажимай на кнопки и удивляйся моими способностями\n\nТы готов(Да/Нет)?</b>'
-    bot.send_message(message.chat.id, name, parse_mode='html', reply_markup=create_inline_button())
+    bot.send_message(message.chat.id, name, parse_mode='html', reply_markup=create_inline_button(list))
 
 @bot.callback_query_handler(func=lambda call: True)
 def answer_inline(call):
-    if call.data == "yes":
+    if call.data == "Да":
         list = ['Погода', 'Событие', 'Катя', 'Сколько дней осталось до зп?', 'Сколько осталось спать?', 'Насколько ты молодец']
         bot.send_message(call.message.chat.id, 'Отлично! Выбирай.', reply_markup=create_button(list))
-    if call.data == "no":
+    elif call.data == "Нет":
         bot.send_message(call.message.chat.id, 'Ответ неправильный. Давай еще раз... Нажимай на /start')
+    elif call.data == "Пойду":
+        bot.send_message(call.message.chat.id, sleep.sport_yes())
+    elif call.data == "Не пойду":
+        bot.send_message(call.message.chat.id, sleep.sport_no())
 
 @bot.message_handler(content_types=['text'])
 def choice_of_answer(message):
@@ -68,8 +74,10 @@ def choice_of_answer(message):
         else:
             bot.send_message(message.chat.id, 'Осталось: {}'.format(day))
     elif message.text == "Сколько осталось спать?":
+        list = ['Пойду', 'Не пойду']
         bot.send_message(message.chat.id, 'Самое популярное занятие перед сном — считать, сколько часов ты проспишь, если уснешь прямо сейчас.'
-                                          ' Как хорошо, что у тебя есть этот бот.')
+                                          ' Как хорошо, что у тебя есть этот бот. \n'
+                                          'Пойдешь завтра в зал?', reply_markup=create_inline_button(list))
     elif message.text == "Насколько ты молодец":
         rand_num = random.randrange(85, 110, 1)
         if rand_num < 95:
